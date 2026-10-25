@@ -1,35 +1,36 @@
-import cv2
-
+from app.camera import Camera
 from app.detector import ObjectDetector
+from app.visualizer import Visualizer
 
 
 def main():
+    camera = Camera()
     detector = ObjectDetector()
-    camera = cv2.VideoCapture(0)
+    visualizer = Visualizer()
 
-    if not camera.isOpened():
+    if not camera.open():
         print("Erreur : impossible d'ouvrir la webcam.")
         return
 
     try:
         while True:
-            success, frame = camera.read()
+            frame = camera.read()
 
-            if not success:
-                print("Erreur : impossible de lire l'image.")
+            if frame is None:
+                print("Impossible de capturer l'image.")
                 break
 
             result = detector.detect(frame)
-            annotated_frame = result.plot()
 
-            cv2.imshow("Real-Time Object Detection", annotated_frame)
-
-            if cv2.waitKey(1) & 0xFF == ord("q"):
+            if not visualizer.show(result):
                 break
+
+    except KeyboardInterrupt:
+        print("\nArrêt demandé.")
 
     finally:
         camera.release()
-        cv2.destroyAllWindows()
+        visualizer.close()
 
 
 if __name__ == "__main__":
