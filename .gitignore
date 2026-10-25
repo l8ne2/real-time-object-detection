@@ -1,0 +1,26 @@
+# Python
+___pycache__/
+*.py[cod]
+*egg-info/
+.pytest_cache/
+
+#Environment virtuels
+.venv/
+venv/
+env/
+
+# Editeurs
+.vscode/
+.idea/
+
+#Varibles d'environnement et secrets
+.env
+
+# Modéles volumineux
+models/*.pt
+models/*.onnx
+
+# Fichiers généres
+runs/
+outputs/
+*.log
