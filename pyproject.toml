@@ -20,16 +20,15 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Image Recognition",
 ]
 dependencies = [
-  "ultralytics>=8.3,<9",
-  "opencv-python>=4.9,<5",
-  "numpy>=1.26,<3",
+  "ultralytics>=8.4,<9",
+  "opencv-python>=4.14,<5",
+  "numpy>=2.3,<3",
 ]
 
 [project.optional-dependencies]
 dev = [
-  "pytest>=8.0",
+  "pytest>=9.0",
 ]
-
 [project.urls]
 Homepage = "https://github.com/l8ne2/real-time-object-detection"
 Issues = "https://github.com/l8ne2/real-time-object-detection/issues"
