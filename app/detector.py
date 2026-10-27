@@ -1,4 +1,10 @@
+import logging
+
+import numpy as np
 from ultralytics import YOLO
+from ultralytics.engine.results import Results
+
+logger = logging.getLogger(__name__)
 
 
 class ObjectDetector:
@@ -14,16 +20,15 @@ class ObjectDetector:
 
         self.model = YOLO(model_path)
         self.confidence = confidence
+        logger.info("Model %s loaded (confidence=%.2f)", model_path, confidence)
 
-    def detect(self, frame):
+    def detect(self, frame: np.ndarray) -> Results:
         """Return detection results for an image."""
         if frame is None or frame.size == 0:
             raise ValueError("The input image must not be empty.")
 
-        result = self.model.predict(
+        return self.model.predict(
             source=frame,
             conf=self.confidence,
             verbose=False,
         )[0]
-
-        return result

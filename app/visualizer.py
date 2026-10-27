@@ -1,16 +1,17 @@
 import cv2
+from ultralytics.engine.results import Results
 
 
 class Visualizer:
     """Display object detection results."""
 
-    def __init__(self, window_name: str = "Real-Time Object Detection"):
+    def __init__(self, window_name: str = "Real-Time Object Detection") -> None:
         self.window_name = window_name
 
-    def show(self, result) -> bool:
+    def show(self, result: Results) -> bool:
         """Display an annotated frame.
 
-        Returns False when the user requests to quit.
+        Return False when the user requests to quit.
         """
         frame = result.plot()
         cv2.imshow(self.window_name, frame)

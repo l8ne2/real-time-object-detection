@@ -1,24 +1,33 @@
+import logging
+
 from app.camera import Camera
 from app.detector import ObjectDetector
 from app.visualizer import Visualizer
 
+logger = logging.getLogger(__name__)
 
-def main():
+
+def main() -> int:
+    """Run the detection loop. Return a process exit code."""
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    )
+
     camera = Camera()
     detector = ObjectDetector()
     visualizer = Visualizer()
 
     if not camera.open():
-        print("Erreur : impossible d'ouvrir la webcam.")
-        return
+        return 1
 
     try:
         while True:
             frame = camera.read()
 
             if frame is None:
-                print("Impossible de capturer l'image.")
-                break
+                logger.error("Could not read a frame from the camera")
+                return 1
 
             result = detector.detect(frame)
 
@@ -26,12 +35,14 @@ def main():
                 break
 
     except KeyboardInterrupt:
-        print("\nArrêt demandé.")
+        logger.info("Stopped by user")
 
     finally:
         camera.release()
         visualizer.close()
 
+    return 0
+
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

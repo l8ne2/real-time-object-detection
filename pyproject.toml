@@ -29,6 +29,19 @@ dependencies = [
 dev = [
   "pytest>=9.0",
 ]
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+  "E",   # erreurs de style (pycodestyle)
+  "F",   # erreurs logiques (pyflakes)
+  "I",   # tri des imports
+  "UP",  # syntaxe Python moderne
+  "B",   # bugs courants
+  "SIM", # simplifications
+]
 [project.urls]
 Homepage = "https://github.com/l8ne2/real-time-object-detection"
 Issues = "https://github.com/l8ne2/real-time-object-detection/issues"
