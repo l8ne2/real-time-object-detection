@@ -20,7 +20,7 @@ classifiers = [
 ]
 dependencies = [
   "ultralytics>=8.4,<9",
-  "opencv-python>=4.14,<5",
+  "opencv-python>=5.0.0.93,<6",
   "numpy>=2.3,<3",
 ]
 
