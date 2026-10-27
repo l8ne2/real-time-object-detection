@@ -32,10 +32,11 @@ class ObjectDetector:
             conf=self.confidence,
             verbose=False,
         )[0]
+
+
 def extract_labels(result: Results) -> list[str]:
     """Return the class name of every detection in a result."""
     if result.boxes is None:
         return []
 
-    return [result.names[int(cls)] for cls in result.boxes.cls.tolist()]    
-    
+    return [result.names[int(cls)] for cls in result.boxes.cls.tolist()]
