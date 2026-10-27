@@ -1,26 +1,38 @@
 # Python
-___pycache__/
+__pycache__/
 *.py[cod]
-*egg-info/
-.pytest_cache/
+*.egg-info/
+build/
+dist/
 
-#Environment virtuels
+# Tests et outils
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Environnements virtuels
 .venv/
 venv/
 env/
 
-# Editeurs
+# Éditeurs
 .vscode/
 .idea/
 
-#Varibles d'environnement et secrets
+# Variables d'environnement et secrets
 .env
 
-# Modéles volumineux
-models/*.pt
-models/*.onnx
+# Modèles (YOLO télécharge yolov8n.pt à la racine du projet)
+*.pt
+*.onnx
+!models/.gitkeep
 
-# Fichiers généres
+# Fichiers générés
 runs/
 outputs/
 *.log
+
+# Système
+.DS_Store
+Thumbs.db
