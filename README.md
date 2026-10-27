@@ -1,119 +1,130 @@
-🔍 Détection d'objets en temps réel
+# 🔍 Détection d'objets en temps réel
 
-Une application de vision par ordinateur (Computer Vision) développée en Python, utilisant OpenCV et YOLO pour détecter des objets à partir d'une webcam en temps réel.
+[![CI](https://github.com/l8ne2/real-time-object-detection/actions/workflows/ci.yml/badge.svg)](https://github.com/l8ne2/real-time-object-detection/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)
+[![Licence MIT](https://img.shields.io/badge/licence-MIT-green)](LICENSE)
+[![Ruff](https://img.shields.io/badge/lint-ruff-261230)](https://github.com/astral-sh/ruff)
 
-Le système identifie les objets présents dans l'image et affiche des rectangles de détection, les noms des classes ainsi que les scores de confiance associés.
+Application de vision par ordinateur en Python qui détecte des objets en temps réel avec **OpenCV** et **YOLO** (Ultralytics), à partir d'une webcam, d'un fichier vidéo ou d'une image.
 
-✨ Fonctionnalités
+<p align="center">
+  <img src="docs/demo.gif" alt="Démonstration de la détection d'objets en temps réel" width="640">
+</p>
 
-- 📷 Capture vidéo à partir d'une webcam.
-- 🤖 Détection d'objets grâce à un modèle YOLO préentraîné.
-- 🎯 Affichage des objets détectés avec leurs rectangles de délimitation.
-- 📊 Affichage des classes et des scores de confiance.
-- 🧩 Architecture modulaire orientée objet.
-- 🧪 Tests automatisés avec pytest.
+## ✨ Fonctionnalités
 
-🛠️ Technologies utilisées
+- 📷 Trois sources d'entrée : webcam, fichier vidéo, image.
+- 🤖 Détection par un modèle YOLO préentraîné, au choix.
+- 🎯 Rectangles de détection, classes et scores de confiance affichés à l'écran.
+- ⏱️ Compteur d'images par seconde (FPS) lissé et nombre d'objets par image.
+- 📊 Résumé de session à la fin : images traitées et objets les plus fréquents.
+- ⚙️ Interface en ligne de commande avec seuil de confiance réglable.
+- 🧩 Architecture modulaire, typée et testée, avec intégration continue.
 
-- Python : langage de programmation.
-- OpenCV : capture vidéo et affichage des images.
-- Ultralytics YOLO : détection d'objets.
-- NumPy : manipulation des tableaux numériques.
-- pytest : tests automatisés.
+## ⚙️ Prérequis
 
-📁 Architecture du projet
+- Python 3.11 ou plus.
+- Une webcam (uniquement pour le mode temps réel).
+- Une connexion Internet à la première exécution, pour télécharger le modèle.
 
-real-time-object-detection/
-├── app/
-│   ├── __init__.py
-│   ├── main.py
-│   ├── camera.py
-│   ├── detector.py
-│   └── visualizer.py
-├── models/
-│   └── .gitkeep
-├── tests/
-│   ├── __init__.py
-│   └── test_detector.py
-├── docs/
-│   └── architecture.md
-├── .gitignore
-├── requirements.txt
-├── README.md
-├── LICENSE
-└── .python-version
+## 🚀 Installation
 
-⚙️ Prérequis
-
-- Python installé sur la machine.
-- Une webcam fonctionnelle.
-- Une connexion Internet pour télécharger le modèle lors de sa première utilisation.
-- Git pour récupérer le projet.
-
-🚀 Installation
-
-1. Cloner le dépôt
-
-Remplacez "l8ne2" par votre nom d'utilisateur GitHub.
-
+```bash
 git clone https://github.com/l8ne2/real-time-object-detection.git
 cd real-time-object-detection
 
-2. Créer un environnement virtuel
-
 python -m venv .venv
+```
 
-Sous Windows PowerShell :
+Activer l'environnement virtuel :
 
+```bash
+# Windows (PowerShell)
 .\.venv\Scripts\Activate.ps1
 
-3. Installer les dépendances
+# Linux / macOS
+source .venv/bin/activate
+```
 
-python -m pip install -r requirements.txt
+Installer le projet :
 
-▶️ Utilisation
+```bash
+python -m pip install -e .
+```
 
-Depuis le dossier racine du projet, exécutez :
+L'installation peut prendre quelques minutes : Ultralytics dépend de PyTorch, qui est volumineux.
 
-python -m app.main
+## ▶️ Utilisation
 
-La webcam s'ouvre et le système commence à détecter les objets visibles.
+```bash
+object-detect                              # webcam par défaut
+object-detect --source 1                   # deuxième webcam
+object-detect --source video.mp4           # fichier vidéo
+object-detect --source photo.jpg           # image
+object-detect --model yolov8s.pt --conf 0.7
+```
 
-Pour arrêter l'application, appuyez sur la touche "q".
+Si le chemin d'un fichier contient des espaces, mets-le entre guillemets.
 
-Le modèle YOLO préentraîné est téléchargé automatiquement lors de sa première utilisation s'il n'est pas déjà disponible localement.
+| Option | Description | Défaut |
+| --- | --- | --- |
+| `--model` | Nom ou chemin du modèle YOLO | `yolov8n.pt` |
+| `--conf` | Seuil de confiance, entre 0 et 1 | `0.5` |
+| `--source` | Index de webcam, fichier vidéo ou image | `0` |
+| `-v`, `--verbose` | Active les journaux de débogage | désactivé |
+| `--version` | Affiche la version | |
 
-🧪 Exécuter les tests
+**Commandes clavier** : `q` quitte l'application. En mode image, la fenêtre reste ouverte jusqu'à l'appui sur une touche.
 
-Pour vérifier le fonctionnement des tests automatisés :
+Le modèle est téléchargé automatiquement à la première utilisation s'il n'est pas déjà présent.
 
-python -m pytest -v
+## 🛠️ Développement
 
-🧠 Architecture logicielle
+```bash
+python -m pip install -e ".[dev]"
 
-Le projet repose sur une séparation des responsabilités :
+python -m ruff check .          # lint
+python -m ruff format .         # formatage
+python -m pytest --cov          # tests et couverture
+```
 
-- "main.py" : point d'entrée et coordination de l'application.
-- "camera.py" : ouverture de la webcam et capture des images.
-- "detector.py" : chargement du modèle YOLO et détection des objets.
-- "visualizer.py" : affichage des résultats de détection.
-- "test_detector.py" : vérification du comportement du détecteur.
+Les tests utilisent des objets simulés (mocks) : ils ne nécessitent ni webcam ni modèle téléchargé. La CI GitHub Actions lance le lint et les tests à chaque push. Voir [CONTRIBUTING.md](CONTRIBUTING.md) pour contribuer.
 
-Cette organisation facilite la maintenance, les tests et l'ajout de nouvelles fonctionnalités.
+## 🧠 Architecture
 
-🔮 Améliorations prévues
+```text
+real-time-object-detection/
+├── app/
+│   ├── main.py          # point d'entrée et coordination
+│   ├── cli.py           # arguments de la ligne de commande
+│   ├── config.py        # configuration de l'application
+│   ├── camera.py        # capture webcam et vidéo
+│   ├── detector.py      # chargement du modèle YOLO et détection
+│   ├── visualizer.py    # affichage des résultats
+│   ├── fps.py           # compteur de FPS
+│   └── stats.py         # statistiques de détection
+├── tests/               # tests unitaires
+├── docs/                # documentation et démonstration
+├── .github/workflows/   # intégration continue
+└── pyproject.toml       # métadonnées, dépendances, outils
+```
 
-- [ ] Ajouter un compteur d'images par seconde (FPS).
-- [ ] Permettre de modifier le seuil de confiance.
-- [ ] Prendre en charge des images et des fichiers vidéo.
-- [ ] Améliorer les tests avec des modèles simulés.
-- [ ] Ajouter des statistiques sur les objets détectés.
-- [ ] Optimiser les performances sur les machines disposant de ressources limitées.
+Chaque module a une seule responsabilité, ce qui facilite les tests et l'ajout de fonctionnalités. Le détail et le schéma du flux de données sont dans [docs/architecture.md](docs/architecture.md).
 
-👨‍💻 Auteur
+## 🔮 Pistes d'amélioration
 
-Projet personnel réalisé dans le cadre de l'apprentissage de la vision par ordinateur, du traitement d'images et de l'intelligence artificielle.
+- [ ] Suivi d'objets (tracking) pour compter des objets uniques.
+- [ ] Export des statistiques (CSV ou JSON).
+- [ ] Enregistrement de la vidéo annotée.
+- [ ] Prise en charge de dossiers d'images.
+- [ ] Image Docker.
 
-📄 Licence
+## 🙏 Remerciements et licence
 
-Consultez le fichier "LICENSE" pour connaître les conditions d'utilisation et de distribution du projet.
+Ce projet utilise [Ultralytics YOLO](https://github.com/ultralytics/ultralytics), [OpenCV](https://opencv.org/) et [NumPy](https://numpy.org/). Ultralytics est distribué sous sa propre licence (AGPL-3.0, avec une licence commerciale en option, à vérifier sur son dépôt) : consulte-la avant tout usage commercial.
+
+Le code de ce projet est distribué sous licence MIT. Voir [LICENSE](LICENSE).
+
+## 👨‍💻 Auteur
+
+**Aliou BA**, étudiant en informatique, projet réalisé dans le cadre de l'apprentissage de la vision par ordinateur. [GitHub](https://github.com/l8ne2)
