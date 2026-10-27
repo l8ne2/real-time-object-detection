@@ -1,7 +1,9 @@
+from types import SimpleNamespace
+
 import numpy as np
 import pytest
 
-from app.detector import ObjectDetector
+from app.detector import ObjectDetector, extract_labels
 
 
 def test_detector_rejects_invalid_confidence():
@@ -29,3 +31,16 @@ def test_detector_rejects_empty_image():
 
     with pytest.raises(ValueError, match="must not be empty"):
         detector.detect(empty_frame)
+def test_extract_labels_returns_class_names():
+    result = SimpleNamespace(
+        names={0: "person", 1: "car"},
+        boxes=SimpleNamespace(cls=np.array([0, 0, 1])),
+    )
+
+    assert extract_labels(result) == ["person", "person", "car"]
+
+
+def test_extract_labels_without_boxes():
+    result = SimpleNamespace(names={}, boxes=None)
+
+    assert extract_labels(result) == []
